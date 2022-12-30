@@ -29,9 +29,10 @@ int main(int argc, char* argv[])
 	}
 
 	Window* window = new Window();
-	window->setWidth(1024);
-	window->setHeight(768);
-	window->setTitle("Hello world");
+	window->setTitle(reader->getInstance()->getReader().GetString("window", "title", "window"));
+	window->setWidth(reader->getInstance()->getReader().GetInteger("window", "width", 640));
+	window->setHeight(reader->getInstance()->getReader().GetInteger("window", "height", 480));
+
 	try
 	{
 		window->init();

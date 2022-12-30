@@ -7,8 +7,6 @@
 
 #include "spdlog/spdlog.h"
 
-using namespace std::literals::string_view_literals;
-
 /**
 * Constructor
 */
@@ -47,7 +45,14 @@ void Window::init()
 		throw std::runtime_error(std::format("Failed to initialize window: {}", SDL_GetError()));
 	}
 
-	initVulkan();
+	try
+	{
+		initVulkan();
+	}
+	catch (std::exception e)
+	{
+		throw e;
+	}
 }
 
 /**
@@ -57,7 +62,7 @@ void Window::init()
 void Window::setWidth(const int width)
 {
 	_width = width <= 0 ? 1 : width;
-	
+
 	if (_window != nullptr)
 	{
 		int width;

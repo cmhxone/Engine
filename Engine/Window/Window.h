@@ -6,6 +6,8 @@
 
 #include <SDL2/SDL.h>
 
+using namespace std::string_view_literals;
+
 class Window
 {
 public:
@@ -28,10 +30,10 @@ protected:
 private:
 	SDL_Window* _window;
 
-	int _width;
-	int _height;
+	int _width = 640;
+	int _height = 480;
 
-	std::string_view _title;
+	std::string_view _title = "window"sv;
 
 	void initVulkan();
 };
