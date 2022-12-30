@@ -5,6 +5,8 @@
 
 #include <SDL2/SDL_vulkan.h>
 
+#include "spdlog/spdlog.h"
+
 using namespace std::literals::string_view_literals;
 
 /**
@@ -97,22 +99,27 @@ void Window::setTitle(const std::string_view title)
 	}
 }
 
+/**
+* initialize vulkan for SDL window
+*/
 void Window::initVulkan()
 {
 	// Get Vulkan extensions
 	uint32_t extensionCount;
+	std::vector<const char*> extensionNames;
+
 	if (SDL_Vulkan_GetInstanceExtensions(_window, &extensionCount, nullptr) != SDL_TRUE)
 	{
 		throw std::runtime_error(std::format("Failed to get vulkan extensions: {}", SDL_GetError()));
 	}
 
-	if (SDL_Vulkan_GetInstanceExtensions(_window, &extensionCount, _extensionNames.data()) != SDL_TRUE)
+	if (SDL_Vulkan_GetInstanceExtensions(_window, &extensionCount, extensionNames.data()) != SDL_TRUE)
 	{
 		throw std::runtime_error(std::format("Failed to get names of vulkan extensions: {}", SDL_GetError()));
 	}
 
-	for (const char* extension : _extensionNames)
+	for (const char* extension : extensionNames)
 	{
-		std::cout << std::format("vulkan extension {} loaded", extension) << std::endl;
+		spdlog::debug(std::format("vulkan extension {} loaded", extension));
 	}
 }

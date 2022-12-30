@@ -33,8 +33,6 @@ private:
 
 	std::string_view _title;
 
-	std::vector<const char*> _extensionNames;
-
 	void initVulkan();
 };
 
