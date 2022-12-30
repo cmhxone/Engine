@@ -4,7 +4,7 @@
 #include <ini.h>
 #include <INIReader.h>
 
-#include "../Prototype/Singleton.h"
+#include "../Prototype/Singleton.hpp"
 
 class IniReader : public Singleton<IniReader>
 {

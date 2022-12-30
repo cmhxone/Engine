@@ -50,13 +50,13 @@
     <ClInclude Include="Window\Window.h">
       <Filter>헤더 파일\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Initializer\Initializer.h">
+    <ClInclude Include="Initializer\Initializer.hpp">
       <Filter>헤더 파일\Initializer</Filter>
     </ClInclude>
     <ClInclude Include="IniReader\IniReader.h">
       <Filter>헤더 파일\IniReader</Filter>
     </ClInclude>
-    <ClInclude Include="Prototype\Singleton.h">
+    <ClInclude Include="Prototype\Singleton.hpp">
       <Filter>헤더 파일\Prototype</Filter>
     </ClInclude>
   </ItemGroup>

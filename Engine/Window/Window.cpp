@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <format>
+#include <thread>
 
 #include <SDL2/SDL_vulkan.h>
 
@@ -40,6 +41,8 @@ void Window::init()
 		SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI
 	);
 
+	_stop = true;
+
 	if (_window == nullptr)
 	{
 		throw std::runtime_error(std::format("Failed to initialize window: {}", SDL_GetError()));
@@ -49,9 +52,34 @@ void Window::init()
 	{
 		initVulkan();
 	}
-	catch (std::exception e)
+	catch (std::exception& e)
 	{
 		throw e;
+	}
+}
+
+/**
+* Run window gameloop
+*/
+void Window::run()
+{
+	_stop = false;
+
+	SDL_Event event;
+	while (!_stop)
+	{
+		while (SDL_PollEvent(&event))
+		{
+			switch (event.type)
+			{
+			case SDL_QUIT:
+				_stop = true;
+				break;
+
+			default:
+				break;
+			}
+		}
 	}
 }
 

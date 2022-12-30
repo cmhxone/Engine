@@ -173,8 +173,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IniReader\IniReader.h" />
-    <ClInclude Include="Initializer\Initializer.h" />
-    <ClInclude Include="Prototype\Singleton.h" />
+    <ClInclude Include="Initializer\Initializer.hpp" />
+    <ClInclude Include="Prototype\Singleton.hpp" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
   <ItemGroup>

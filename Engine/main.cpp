@@ -8,7 +8,7 @@
 #include <vulkan/vulkan.hpp>
 
 #include "Window/Window.h"
-#include "Initializer/Initializer.h"
+#include "Initializer/Initializer.hpp"
 #include "IniReader/IniReader.h"
 
 int main(int argc, char* argv[])
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	{
 		engine::initialize(instance);
 	}
-	catch (std::exception e)
+	catch (std::exception& e)
 	{
 		spdlog::error(std::format("{}", e.what()));
 		return EXIT_FAILURE;
@@ -37,53 +37,13 @@ int main(int argc, char* argv[])
 	{
 		window->init();
 	}
-	catch (std::exception e)
+	catch (std::exception& e)
 	{
 		spdlog::error(std::format("{}", e.what()));
 		return EXIT_FAILURE;
 	}
 
-	bool stop = false;
-	SDL_Event event;
-	while (!stop)
-	{
-		while (SDL_PollEvent(&event))
-		{
-			switch (event.type)
-			{
-			case SDL_QUIT:
-				stop = true;
-				break;
-
-			case SDL_KEYDOWN:
-				switch (event.key.keysym.sym)
-				{
-				case SDL_KeyCode::SDLK_RIGHT:
-					window->setWidth(window->getWidth() + 8);
-					break;
-
-				case SDL_KeyCode::SDLK_LEFT:
-					window->setWidth(window->getWidth() - 8);
-					break;
-
-				case SDL_KeyCode::SDLK_UP:
-					window->setHeight(window->getHeight() - 8);
-					break;
-
-				case SDL_KeyCode::SDLK_DOWN:
-					window->setHeight(window->getHeight() + 8);
-					break;
-
-				default:
-					break;
-				}
-				break;
-
-			default:
-				break;
-			}
-		}
-	}
+	window->run();
 
 	engine::destroy(instance);
 

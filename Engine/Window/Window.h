@@ -15,6 +15,7 @@ public:
 	~Window();
 
 	void init();
+	void run();
 
 	void setWidth(const int width);
 	void setHeight(const int height);
@@ -24,11 +25,14 @@ public:
 	constexpr int getHeight() const { return _height; }
 	constexpr std::string_view getTitle() const { return _title; }
 	constexpr SDL_Window* getWindow() const { return _window; }
+	constexpr bool isStop() const { return _stop; }
 
 protected:
 
 private:
 	SDL_Window* _window;
+
+	bool _stop = false;
 
 	int _width = 640;
 	int _height = 480;
