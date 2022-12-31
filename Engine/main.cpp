@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	{
 		engine::initialize(instance);
 	}
-	catch (std::exception& e)
+	catch (const std::exception& e)
 	{
 		spdlog::error(std::format("{}", e.what()));
 		return EXIT_FAILURE;
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 	{
 		window->init();
 	}
-	catch (std::exception& e)
+	catch (const std::exception& e)
 	{
 		spdlog::error(std::format("{}", e.what()));
 		return EXIT_FAILURE;
