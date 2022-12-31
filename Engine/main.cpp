@@ -8,7 +8,7 @@
 #include <vulkan/vulkan.hpp>
 
 #include "Window/Window.h"
-#include "Initializer/Initializer.hpp"
+#include "Initializer/Initializer.h"
 #include "IniReader/IniReader.h"
 
 int main(int argc, char* argv[])

@@ -168,12 +168,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="IniReader\IniReader.cpp" />
+    <ClCompile Include="Initializer\Initializer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IniReader\IniReader.h" />
-    <ClInclude Include="Initializer\Initializer.hpp" />
+    <ClInclude Include="Initializer\Initializer.h" />
     <ClInclude Include="Prototype\Singleton.hpp" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>

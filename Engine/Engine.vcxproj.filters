@@ -34,6 +34,9 @@
     <Filter Include="리소스 파일\ini">
       <UniqueIdentifier>{0f4c59ea-b050-4517-b921-5b72b9617145}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Initializer">
+      <UniqueIdentifier>{b27776ab-9e71-47de-b834-96f868db2357}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,12 +48,15 @@
     <ClCompile Include="IniReader\IniReader.cpp">
       <Filter>소스 파일\IniReader</Filter>
     </ClCompile>
+    <ClCompile Include="Initializer\Initializer.cpp">
+      <Filter>소스 파일\Initializer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window\Window.h">
       <Filter>헤더 파일\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Initializer\Initializer.hpp">
+    <ClInclude Include="Initializer\Initializer.h">
       <Filter>헤더 파일\Initializer</Filter>
     </ClInclude>
     <ClInclude Include="IniReader\IniReader.h">
