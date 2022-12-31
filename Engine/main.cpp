@@ -13,14 +13,12 @@
 
 int main(int argc, char* argv[])
 {
-	VkInstance instance = nullptr;
-
 	IniReader* reader = new IniReader();
 	reader->getInstance();
 
 	try
 	{
-		engine::initialize(instance);
+		engine::initialize();
 	}
 	catch (const std::exception& e)
 	{
@@ -45,7 +43,7 @@ int main(int argc, char* argv[])
 
 	window->run();
 
-	engine::destroy(instance);
+	engine::destroy();
 
 	return EXIT_SUCCESS;
 }

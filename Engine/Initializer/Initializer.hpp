@@ -15,10 +15,12 @@ namespace engine
 {
 	namespace vulkan
 	{
+		VkInstance instance;
+
 		/**
 		* create Vulkan instance
 		*/
-		void createInstance(VkInstance& instance)
+		void createInstance()
 		{
 			/* Create vulkan instance */
 			const VkApplicationInfo appinfo = {
@@ -67,7 +69,7 @@ namespace engine
 		/**
 		* select physical device(grpahics card)
 		*/
-		void selectPhysicalDevice(VkInstance& instance)
+		void selectPhysicalDevice()
 		{
 			/* Physical device initialization */
 			VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
@@ -118,7 +120,7 @@ namespace engine
 		/**
 		* destroy Vulkan instance
 		*/
-		void destroyInstance(VkInstance instance)
+		void destroyInstance()
 		{
 			vkDestroyInstance(instance, nullptr);
 		}
@@ -127,7 +129,7 @@ namespace engine
 	/**
 	* Initialize external libraries
 	*/
-	void initialize(VkInstance instance)
+	void initialize()
 	{
 		/* Spdlog configuration */
 		spdlog::set_level(spdlog::level::debug);
@@ -141,9 +143,9 @@ namespace engine
 
 		try
 		{
-			vulkan::createInstance(instance);
+			vulkan::createInstance();
 			vulkan::getExtensions();
-			vulkan::selectPhysicalDevice(instance);
+			vulkan::selectPhysicalDevice();
 		}
 		catch (const std::exception& e)
 		{
@@ -154,10 +156,10 @@ namespace engine
 	/**
 	* Destroy external libraries
 	*/
-	void destroy(VkInstance instance)
+	void destroy()
 	{
 		spdlog::debug(std::format("destroying engine resources"));
-		vulkan::destroyInstance(instance);
+		vulkan::destroyInstance();
 		SDL_Quit();
 	}
 }
