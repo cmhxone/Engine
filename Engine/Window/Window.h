@@ -14,6 +14,9 @@ public:
 	Window();
 	~Window();
 
+	Window(const Window&) = delete;
+	Window& operator=(const Window&) = delete;
+
 	void init();
 	void run();
 
