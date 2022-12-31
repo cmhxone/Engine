@@ -1,5 +1,14 @@
 #include "Initializer.h"
 
+#include <iostream>
+#include <format>
+#include <map>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_vulkan.h>
+
+#include <spdlog/spdlog.h>
+
 namespace engine
 {
 	/**

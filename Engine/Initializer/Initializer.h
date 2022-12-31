@@ -1,15 +1,8 @@
 #ifndef _ENGINE_INITIALIZER_HEADER_
 #define _ENGINE_INITIALIZER_HEADER_
 
-#include <iostream>
-#include <format>
-#include <map>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_vulkan.h>
+#include <vector>
 #include <vulkan/vulkan.h>
-
-#include <spdlog/spdlog.h>
 
 namespace engine
 {
