@@ -165,6 +165,46 @@ namespace engine::vulkan
 	}
 
 	/**
+	* check if physical device is suitable
+	*/
+	bool isDeviceSuitable(const VkPhysicalDevice& device)
+	{
+		QueueFamilyIndicies indices = findQueueFamilyIndices(device);
+
+		return indices.isComplete();
+	}
+
+	/**
+	* find queue-family from physical device
+	*/
+	QueueFamilyIndicies findQueueFamilyIndices(const VkPhysicalDevice& device)
+	{
+		QueueFamilyIndicies indicies;
+
+		uint32_t queueFamilyCount = 0;
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+		std::vector<VkQueueFamilyProperties> queueFamilies;
+		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+		int i = 0;
+		for (const VkQueueFamilyProperties& queueFamily : queueFamilies)
+		{
+			if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+			{
+				indicies.graphicsFamily = i;
+			}
+
+			if (indicies.isComplete()) {
+				break;
+			}
+
+			i++;
+		}
+
+		return indicies;
+	}
+
+	/**
 	* destroy Vulkan instance
 	*/
 	void destroyInstance()
