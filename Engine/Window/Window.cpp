@@ -14,9 +14,6 @@
 Window::Window()
 {
 	_window = nullptr;
-	_width = 800;
-	_height = 600;
-	_title = "Engine"sv;
 }
 
 /**

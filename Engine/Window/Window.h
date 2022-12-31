@@ -1,12 +1,10 @@
 #ifndef _ENGINE_WINDOW_HEADER_
 #define _ENGINE_WINDOW_HEADER_
 
-#include <string_view>
+#include <string>
 #include <vector>
 
 #include <SDL2/SDL.h>
-
-using namespace std::string_view_literals;
 
 class Window
 {
@@ -40,7 +38,7 @@ private:
 	int _width = 640;
 	int _height = 480;
 
-	std::string_view _title = "window"sv;
+	std::string _title = "window";
 };
 
 #endif // !_ENGINE_WINDOW_HEADER_
