@@ -15,6 +15,9 @@ namespace engine
 {
 	namespace vulkan
 	{
+		/**
+		* create Vulkan instance
+		*/
 		void createInstance(VkInstance& instance)
 		{
 			/* Create vulkan instance */
@@ -44,6 +47,9 @@ namespace engine
 			}
 		}
 
+		/**
+		* enumerate Vulkan extensions
+		*/
 		void getExtensions()
 		{
 			/* Log Vulkan extensions */
@@ -58,6 +64,9 @@ namespace engine
 			}
 		}
 
+		/**
+		* select physical device(grpahics card)
+		*/
 		void selectPhysicalDevice(VkInstance& instance)
 		{
 			/* Physical device initialization */
@@ -106,6 +115,9 @@ namespace engine
 			}
 		}
 
+		/**
+		* destroy Vulkan instance
+		*/
 		void destroyInstance(VkInstance instance)
 		{
 			vkDestroyInstance(instance, nullptr);
