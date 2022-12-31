@@ -22,11 +22,11 @@ public:
 	void setHeight(const int height);
 	void setTitle(const std::string_view title);
 
-	constexpr int getWidth() const { return _width; }
-	constexpr int getHeight() const { return _height; }
-	constexpr std::string_view getTitle() const { return _title; }
-	constexpr SDL_Window* getWindow() const { return _window; }
-	constexpr bool isStop() const { return _stop; }
+	constexpr const int getWidth() const { return _width; }
+	constexpr const int getHeight() const { return _height; }
+	constexpr const std::string_view getTitle() const { return _title; }
+	constexpr const SDL_Window* getWindow() const { return _window; }
+	constexpr const bool isStop() const { return _stop; }
 
 protected:
 
