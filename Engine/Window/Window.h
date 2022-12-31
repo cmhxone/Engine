@@ -38,8 +38,6 @@ private:
 	int _height = 480;
 
 	std::string_view _title = "window"sv;
-
-	void initVulkan();
 };
 
 #endif // !_ENGINE_WINDOW_HEADER_

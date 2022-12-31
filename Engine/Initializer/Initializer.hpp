@@ -49,6 +49,16 @@ namespace engine
 		{
 			throw::std::runtime_error(std::format("Failed to create Vulkan instance"));
 		}
+
+		uint32_t extensionCount = 0;
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+		std::vector<VkExtensionProperties> extensions(extensionCount);
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
+
+		for (const VkExtensionProperties &extension : extensions)
+		{
+			spdlog::debug(std::format("{}", extension.extensionName));
+		}
 	}
 
 	/**
