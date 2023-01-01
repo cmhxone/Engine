@@ -27,8 +27,10 @@ namespace engine::vulkan
 	void createInstance();
 	void getExtensions();
 	void selectPhysicalDevice();
+	void createLogicalDevice();
 	void destroyInstance();
 
+	bool checkValidationLayerSupport();
 	VkPhysicalDevice pickSuitablePhysicalDevice(const std::vector<VkPhysicalDevice>& devices);
 	int calculatePhysicalDeviceScore(const VkPhysicalDevice& device);
 	bool isDeviceSuitable(const VkPhysicalDevice& device);

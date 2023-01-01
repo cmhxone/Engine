@@ -51,15 +51,32 @@ namespace engine
 
 namespace engine::vulkan
 {
-	VkInstance instance;
+	VkInstance instance = nullptr;
+	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+
+	const std::vector<const char*> validationLayers = {
+		"VK_LAYER_KHRONOS_validation"
+	};
+
+#ifndef NDEBUG
+	const bool enableValidationLayers = false;
+#else
+	const bool enableValidationLayers = true;
+#endif // !NDEBUG
+
 
 	/**
 	* create Vulkan instance
 	*/
 	void createInstance()
 	{
+		if (enableValidationLayers && !checkValidationLayerSupport())
+		{
+			throw std::runtime_error("validation layers requested, but not available");
+		}
+
 		/* Create vulkan instance */
-		const VkApplicationInfo appinfo = {
+		const VkApplicationInfo appInfo = {
 			.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
 			.pNext = nullptr,
 			.pApplicationName = "vulkan_hello",
@@ -69,16 +86,16 @@ namespace engine::vulkan
 			.apiVersion = VK_API_VERSION_1_3
 		};
 
-		const VkInstanceCreateInfo createinfo = {
+		const VkInstanceCreateInfo createInfo = {
 			.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-			.pApplicationInfo = &appinfo,
-			.enabledLayerCount = 0,
-			.ppEnabledLayerNames = nullptr,
+			.pApplicationInfo = &appInfo,
+			.enabledLayerCount = enableValidationLayers ? static_cast<uint32_t>(validationLayers.size()) : 0,
+			.ppEnabledLayerNames = enableValidationLayers ? validationLayers.data() : nullptr,
 			.enabledExtensionCount = 0,
-			.ppEnabledExtensionNames = nullptr
+			.ppEnabledExtensionNames = nullptr,
 		};
 
-		VkResult result = vkCreateInstance(&createinfo, nullptr, &instance);
+		VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
 		if (result != VkResult::VK_SUCCESS)
 		{
 			throw::std::runtime_error(std::format("Failed to create Vulkan instance"));
@@ -108,7 +125,6 @@ namespace engine::vulkan
 	void selectPhysicalDevice()
 	{
 		/* Physical device initialization */
-		VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 		uint32_t deviceCount = 0;
 		vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 		if (deviceCount == 0)
@@ -124,6 +140,59 @@ namespace engine::vulkan
 		{
 			throw new std::runtime_error(std::format("failed to find suitable GPU"));
 		}
+	}
+
+	void createLogicalDevice()
+	{
+		QueueFamilyIndicies indices = findQueueFamilyIndices(physicalDevice);
+
+		VkDeviceQueueCreateInfo queueCreateInfo{
+			.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+			.queueFamilyIndex = indices.graphicsFamily.value(),
+			.queueCount = 1
+		};
+
+		float queuePriority = 1.0f;
+		queueCreateInfo.pQueuePriorities = &queuePriority;
+
+		VkPhysicalDeviceFeatures deviceFeatures{};
+
+		VkDeviceCreateInfo createInfo{
+			.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+			.queueCreateInfoCount = 1,
+			.pQueueCreateInfos = &queueCreateInfo,
+			.enabledExtensionCount = 0,
+			.pEnabledFeatures = &deviceFeatures,
+		};
+	}
+
+	bool checkValidationLayerSupport()
+	{
+		uint32_t layerCount;
+		vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+		std::vector<VkLayerProperties> availableLayers(layerCount);
+		vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+		for (const char* layerName : validationLayers)
+		{
+			bool layerFound = false;
+			
+			for (const VkLayerProperties& layerProperties : availableLayers)
+			{
+				if (strcmp(layerName, layerProperties.layerName) == 0)
+				{
+					layerFound = true;
+					break;
+				}
+			}
+
+			if (!layerFound)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	VkPhysicalDevice pickSuitablePhysicalDevice(const std::vector<VkPhysicalDevice>& devices)
