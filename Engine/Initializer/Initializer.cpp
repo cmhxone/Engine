@@ -114,7 +114,7 @@ namespace engine::vulkan
 
 		for (const VkExtensionProperties& extension : extensions)
 		{
-			spdlog::debug(std::format("Vulkan extensions: {}", extension.extensionName));
+			spdlog::debug(std::format("Loaded extension: {}", extension.extensionName));
 		}
 	}
 
@@ -211,6 +211,11 @@ namespace engine::vulkan
 		if (enableValidationLayers)
 		{
 			sdlExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+		}
+
+		for (const char* extension : sdlExtensions)
+		{
+			spdlog::debug(std::format("Required extension: {}", extension));
 		}
 
 		return sdlExtensions;
