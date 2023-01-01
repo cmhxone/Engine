@@ -5,8 +5,9 @@
 #include <thread>
 
 #include <SDL3/SDL_vulkan.h>
+#include <spdlog/spdlog.h>
 
-#include "spdlog/spdlog.h"
+#include "../Initializer/Initializer.h"
 
 /**
 * Constructor
@@ -44,6 +45,11 @@ void Window::init()
 	{
 		throw std::runtime_error(std::format("Failed to initialize window: {}", SDL_GetError()));
 	}
+
+	engine::vulkan::createInstance(_window);
+	engine::vulkan::getExtensions();
+	engine::vulkan::selectPhysicalDevice();
+	engine::vulkan::createLogicalDevice();
 }
 
 /**
