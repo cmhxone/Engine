@@ -4,7 +4,7 @@
 #include <format>
 #include <thread>
 
-#include <SDL2/SDL_vulkan.h>
+#include <SDL3/SDL_vulkan.h>
 
 #include "spdlog/spdlog.h"
 
@@ -35,7 +35,7 @@ void Window::init()
 		SDL_WINDOWPOS_CENTERED,
 		_width,
 		_height,
-		SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI
+		SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI
 	);
 
 	_stop = true;
