@@ -7,17 +7,14 @@
 #include <spdlog/spdlog.h>
 
 #include "Window/Window.h"
-#include "Initializer/Initializer.h"
+#include "Engine/Engine.h"
 #include "IniReader/IniReader.h"
 
 int main(int argc, char* argv[])
 {
-	IniReader* reader = new IniReader();
-	reader->getInstance();
-
 	try
 	{
-		engine::initialize();
+		engine::Engine::getInstance();
 	}
 	catch (const std::exception& e)
 	{
@@ -26,9 +23,9 @@ int main(int argc, char* argv[])
 	}
 
 	Window* window = new Window();
-	window->setTitle(reader->getInstance()->getReader().GetString("window", "title", "window"));
-	window->setWidth(reader->getInstance()->getReader().GetInteger("window", "width", 640));
-	window->setHeight(reader->getInstance()->getReader().GetInteger("window", "height", 480));
+	window->setTitle(IniReader::getInstance()->getReader().GetString("window", "title", "window"));
+	window->setWidth(IniReader::getInstance()->getReader().GetInteger("window", "width", 640));
+	window->setHeight(IniReader::getInstance()->getReader().GetInteger("window", "height", 480));
 
 	try
 	{
@@ -42,7 +39,7 @@ int main(int argc, char* argv[])
 
 	window->run();
 
-	engine::destroy();
+	engine::Engine::destoryInstance();
 
 	return EXIT_SUCCESS;
 }

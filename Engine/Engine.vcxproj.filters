@@ -19,9 +19,6 @@
     <Filter Include="소스 파일\Window">
       <UniqueIdentifier>{2a9820f3-f405-4db5-a875-463d6b8e3aac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\Initializer">
-      <UniqueIdentifier>{d75ed43c-ce2f-4da7-adf4-d4c1b209a632}</UniqueIdentifier>
-    </Filter>
     <Filter Include="헤더 파일\Prototype">
       <UniqueIdentifier>{5ccf3869-2484-4213-a00e-7ae368e061eb}</UniqueIdentifier>
     </Filter>
@@ -34,7 +31,10 @@
     <Filter Include="리소스 파일\ini">
       <UniqueIdentifier>{0f4c59ea-b050-4517-b921-5b72b9617145}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Initializer">
+    <Filter Include="헤더 파일\Engine">
+      <UniqueIdentifier>{d75ed43c-ce2f-4da7-adf4-d4c1b209a632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Engine">
       <UniqueIdentifier>{b27776ab-9e71-47de-b834-96f868db2357}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -48,22 +48,22 @@
     <ClCompile Include="IniReader\IniReader.cpp">
       <Filter>소스 파일\IniReader</Filter>
     </ClCompile>
-    <ClCompile Include="Initializer\Initializer.cpp">
-      <Filter>소스 파일\Initializer</Filter>
+    <ClCompile Include="Engine\Engine.cpp">
+      <Filter>소스 파일\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window\Window.h">
       <Filter>헤더 파일\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Initializer\Initializer.h">
-      <Filter>헤더 파일\Initializer</Filter>
-    </ClInclude>
     <ClInclude Include="IniReader\IniReader.h">
       <Filter>헤더 파일\IniReader</Filter>
     </ClInclude>
     <ClInclude Include="Prototype\Singleton.hpp">
       <Filter>헤더 파일\Prototype</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Engine.h">
+      <Filter>헤더 파일\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

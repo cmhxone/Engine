@@ -183,14 +183,14 @@ copy $(SDL3_dir)\lib\x64\Release\SDL2.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="IniReader\IniReader.cpp" />
-    <ClCompile Include="Initializer\Initializer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="IniReader\IniReader.h" />
-    <ClInclude Include="Initializer\Initializer.h" />
     <ClInclude Include="Prototype\Singleton.hpp" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>

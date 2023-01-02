@@ -1,4 +1,4 @@
-#include "Initializer.h"
+#include "Engine.h"
 
 #include <iostream>
 #include <format>
@@ -14,7 +14,7 @@ namespace engine
 	/**
 	* Initialize external libraries
 	*/
-	void initialize()
+	Engine::Engine()
 	{
 		/* Spdlog configuration */
 		spdlog::set_level(spdlog::level::debug);
@@ -30,39 +30,19 @@ namespace engine
 	/**
 	* Destroy external libraries
 	*/
-	void destroy()
+	Engine::~Engine()
 	{
 		spdlog::debug(std::format("destroying engine resources"));
-		vulkan::destroyInstance();
+		destroyInstance();
 		SDL_Quit();
 	}
-}
-
-namespace engine::vulkan
-{
-	VkInstance instance = nullptr;
-	VkDebugUtilsMessengerEXT debugMessaenger = nullptr;
-	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-	VkDevice device = VK_NULL_HANDLE;
-	VkQueue graphicsQueue = VK_NULL_HANDLE;
-
-	const std::vector<const char*> validationLayers = {
-		"VK_LAYER_KHRONOS_validation"
-	};
-
-#ifndef NDEBUG
-	const bool enableValidationLayers = false;
-#else
-	const bool enableValidationLayers = true;
-#endif // !NDEBUG
-
 
 	/**
 	* create Vulkan instance
 	*/
-	void createInstance(SDL_Window* window)
+	void Engine::createInstance(SDL_Window* window)
 	{
-		if (enableValidationLayers && !checkValidationLayerSupport())
+		if (_enableValidationLayers && !checkValidationLayerSupport())
 		{
 			throw std::runtime_error("validation layers requested, but not available");
 		}
@@ -93,15 +73,15 @@ namespace engine::vulkan
 
 		const VkInstanceCreateInfo createInfo = {
 			.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-			.pNext = enableValidationLayers ? (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo : nullptr,
+			.pNext = _enableValidationLayers ? (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo : nullptr,
 			.pApplicationInfo = &appInfo,
-			.enabledLayerCount = enableValidationLayers ? static_cast<uint32_t>(validationLayers.size()) : 0,
-			.ppEnabledLayerNames = enableValidationLayers ? validationLayers.data() : nullptr,
+			.enabledLayerCount = _enableValidationLayers ? static_cast<uint32_t>(_validationLayers.size()) : 0,
+			.ppEnabledLayerNames = _enableValidationLayers ? _validationLayers.data() : nullptr,
 			.enabledExtensionCount = static_cast<uint32_t>(extensions.size()),
 			.ppEnabledExtensionNames = extensions.data(),
 		};
 
-		VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
+		VkResult result = vkCreateInstance(&createInfo, nullptr, &_instance);
 		if (result != VkResult::VK_SUCCESS)
 		{
 			throw::std::runtime_error(std::format("Failed to create Vulkan instance"));
@@ -111,9 +91,9 @@ namespace engine::vulkan
 	/**
 	* setting up validation layer's debug messenger
 	*/
-	void setupDebugMessenger()
+	void Engine::setupDebugMessenger()
 	{
-		if (!enableValidationLayers)
+		if (!_enableValidationLayers)
 		{
 			return;
 		}
@@ -121,7 +101,7 @@ namespace engine::vulkan
 		VkDebugUtilsMessengerCreateInfoEXT createInfo;
 		populateDebugMessengerCreateInfo(createInfo);
 
-		if (createDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessaenger) != VK_SUCCESS)
+		if (createDebugUtilsMessengerEXT(_instance, &createInfo, nullptr, &_debugMessaenger) != VK_SUCCESS)
 		{
 			throw new std::runtime_error(std::format("failed to set a debug messenger"));
 		}
@@ -130,7 +110,7 @@ namespace engine::vulkan
 	/**
 	* enumerate Vulkan extensions
 	*/
-	void getExtensions()
+	void Engine::getExtensions()
 	{
 		/* Log Vulkan extensions */
 		uint32_t extensionCount = 0;
@@ -147,21 +127,21 @@ namespace engine::vulkan
 	/**
 	* select physical device(grpahics card)
 	*/
-	void selectPhysicalDevice()
+	void Engine::selectPhysicalDevice()
 	{
 		/* Physical device initialization */
 		uint32_t deviceCount = 0;
-		vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+		vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
 		if (deviceCount == 0)
 		{
 			throw new std::runtime_error(std::format("failed to find GPUs with vulkan support"));
 		}
 
 		std::vector<VkPhysicalDevice> devices(deviceCount);
-		vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
+		vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
 
-		physicalDevice = pickSuitablePhysicalDevice(devices);
-		if (physicalDevice == VK_NULL_HANDLE)
+		_physicalDevice = pickSuitablePhysicalDevice(devices);
+		if (_physicalDevice == VK_NULL_HANDLE)
 		{
 			throw new std::runtime_error(std::format("failed to find suitable GPU"));
 		}
@@ -170,9 +150,9 @@ namespace engine::vulkan
 	/**
 	* create logical device
 	*/
-	void createLogicalDevice()
+	void Engine::createLogicalDevice()
 	{
-		QueueFamilyIndicies indices = findQueueFamilyIndices(physicalDevice);
+		QueueFamilyIndicies indices = findQueueFamilyIndices(_physicalDevice);
 
 		VkDeviceQueueCreateInfo queueCreateInfo{
 			.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
@@ -193,35 +173,35 @@ namespace engine::vulkan
 			.pEnabledFeatures = &deviceFeatures,
 		};
 
-		if (enableValidationLayers)
+		if (_enableValidationLayers)
 		{
-			createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-			createInfo.ppEnabledLayerNames = validationLayers.data();
+			createInfo.enabledLayerCount = static_cast<uint32_t>(_validationLayers.size());
+			createInfo.ppEnabledLayerNames = _validationLayers.data();
 		}
 		else
 		{
 			createInfo.enabledLayerCount = 0;
 		}
 
-		if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS)
+		if (vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device) != VK_SUCCESS)
 		{
 			throw std::runtime_error(std::format("failed to create logical device"));
 		}
 
-		vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
+		vkGetDeviceQueue(_device, indices.graphicsFamily.value(), 0, &_graphicsQueue);
 	}
 
 	/**
 	* check validation layer support
 	*/
-	bool checkValidationLayerSupport()
+	bool Engine::checkValidationLayerSupport()
 	{
 		uint32_t layerCount;
 		vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 		std::vector<VkLayerProperties> availableLayers(layerCount);
 		vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
-		for (const char* layerName : validationLayers)
+		for (const char* layerName : _validationLayers)
 		{
 			bool layerFound = false;
 
@@ -246,7 +226,7 @@ namespace engine::vulkan
 	/**
 	* create debug utils messenger extension
 	*/
-	VkResult createDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
+	VkResult Engine::createDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
 	{
 		PFN_vkCreateDebugUtilsMessengerEXT func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
 
@@ -261,7 +241,7 @@ namespace engine::vulkan
 	/**
 	* popluate debug messenger create-info
 	*/
-	void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
+	void Engine::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
 	{
 		createInfo = {
 			.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
@@ -281,7 +261,7 @@ namespace engine::vulkan
 	/**
 	* destroy debug utils messenger extension
 	*/
-	void destroyDebugUtilsmessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
+	void Engine::destroyDebugUtilsmessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
 	{
 		PFN_vkDestroyDebugUtilsMessengerEXT func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
 
@@ -290,13 +270,13 @@ namespace engine::vulkan
 			return;
 		}
 
-		func(instance, debugMessaenger, pAllocator);
+		func(instance, _debugMessaenger, pAllocator);
 	}
 
 	/**
 	* getting required vulkan extensions
 	*/
-	std::vector<const char*> getRequiredExtensions(SDL_Window* window)
+	std::vector<const char*> Engine::getRequiredExtensions(SDL_Window* window)
 	{
 		uint32_t sdlExtensionCount = 0;
 		if (SDL_Vulkan_GetInstanceExtensions(window, &sdlExtensionCount, nullptr) != SDL_TRUE)
@@ -310,7 +290,7 @@ namespace engine::vulkan
 			throw std::runtime_error(std::format("failed to get SDL required extensions, {}", SDL_GetError()));
 		}
 
-		if (enableValidationLayers)
+		if (_enableValidationLayers)
 		{
 			sdlExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 		}
@@ -326,7 +306,7 @@ namespace engine::vulkan
 	/**
 	* pick the most suitable physical device
 	*/
-	VkPhysicalDevice pickSuitablePhysicalDevice(const std::vector<VkPhysicalDevice>& devices)
+	VkPhysicalDevice Engine::pickSuitablePhysicalDevice(const std::vector<VkPhysicalDevice>& devices)
 	{
 		std::multimap<int, VkPhysicalDevice> candidates;
 
@@ -348,7 +328,7 @@ namespace engine::vulkan
 	/**
 	* calculate physical devices processing score
 	*/
-	int calculatePhysicalDeviceScore(const VkPhysicalDevice& device)
+	int Engine::calculatePhysicalDeviceScore(const VkPhysicalDevice& device)
 	{
 		int score = 0;
 
@@ -369,7 +349,7 @@ namespace engine::vulkan
 	/**
 	* check if physical device is suitable
 	*/
-	bool isDeviceSuitable(const VkPhysicalDevice& device)
+	bool Engine::isDeviceSuitable(const VkPhysicalDevice& device)
 	{
 		QueueFamilyIndicies indices = findQueueFamilyIndices(device);
 
@@ -379,7 +359,7 @@ namespace engine::vulkan
 	/**
 	* find queue-family from physical device
 	*/
-	QueueFamilyIndicies findQueueFamilyIndices(const VkPhysicalDevice& device)
+	QueueFamilyIndicies Engine::findQueueFamilyIndices(const VkPhysicalDevice& device)
 	{
 		QueueFamilyIndicies indicies;
 
@@ -409,10 +389,10 @@ namespace engine::vulkan
 	/**
 	* destroy Vulkan instance
 	*/
-	void destroyInstance()
+	void Engine::destroyInstance()
 	{
-		vkDestroyDevice(device, nullptr);
-		destroyDebugUtilsmessengerEXT(instance, debugMessaenger, nullptr);
-		vkDestroyInstance(instance, nullptr);
+		vkDestroyDevice(_device, nullptr);
+		destroyDebugUtilsmessengerEXT(_instance, _debugMessaenger, nullptr);
+		vkDestroyInstance(_instance, nullptr);
 	}
 }
