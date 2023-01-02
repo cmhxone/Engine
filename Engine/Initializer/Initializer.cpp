@@ -43,6 +43,8 @@ namespace engine::vulkan
 	VkInstance instance = nullptr;
 	VkDebugUtilsMessengerEXT debugMessaenger = nullptr;
 	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+	VkDevice device = VK_NULL_HANDLE;
+	VkQueue graphicsQueue = VK_NULL_HANDLE;
 
 	const std::vector<const char*> validationLayers = {
 		"VK_LAYER_KHRONOS_validation"
@@ -190,6 +192,23 @@ namespace engine::vulkan
 			.enabledExtensionCount = 0,
 			.pEnabledFeatures = &deviceFeatures,
 		};
+
+		if (enableValidationLayers)
+		{
+			createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+			createInfo.ppEnabledLayerNames = validationLayers.data();
+		}
+		else
+		{
+			createInfo.enabledLayerCount = 0;
+		}
+
+		if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS)
+		{
+			throw std::runtime_error(std::format("failed to create logical device"));
+		}
+
+		vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
 	}
 
 	/**
@@ -392,6 +411,7 @@ namespace engine::vulkan
 	*/
 	void destroyInstance()
 	{
+		vkDestroyDevice(device, nullptr);
 		destroyDebugUtilsmessengerEXT(instance, debugMessaenger, nullptr);
 		vkDestroyInstance(instance, nullptr);
 	}
