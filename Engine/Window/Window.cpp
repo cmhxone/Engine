@@ -46,7 +46,8 @@ void Window::init()
 		throw std::runtime_error(std::format("Failed to initialize window: {}", SDL_GetError()));
 	}
 
-	engine::Engine::getInstance()->createInstance(_window);
+	engine::Engine::getInstance()->setSDLWindow(_window);
+	engine::Engine::getInstance()->createInstance();
 	engine::Engine::getInstance()->setupDebugMessenger();
 	engine::Engine::getInstance()->getExtensions();
 	engine::Engine::getInstance()->selectPhysicalDevice();

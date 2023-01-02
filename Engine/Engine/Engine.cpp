@@ -40,7 +40,7 @@ namespace engine
 	/**
 	* create Vulkan instance
 	*/
-	void Engine::createInstance(SDL_Window* window)
+	void Engine::createInstance()
 	{
 		if (_enableValidationLayers && !checkValidationLayerSupport())
 		{
@@ -50,7 +50,7 @@ namespace engine
 		std::vector<const char*> extensions;
 		try
 		{
-			extensions = getRequiredExtensions(window);
+			extensions = getRequiredExtensions(_window);
 		}
 		catch (const std::exception& e)
 		{

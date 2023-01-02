@@ -29,12 +29,15 @@ namespace engine
 		Engine();
 		~Engine();
 
-		void createInstance(SDL_Window* window);
+		void setSDLWindow(SDL_Window* window) { _window = window; };
+		void createInstance();
 		void setupDebugMessenger();
 		void getExtensions();
 		void selectPhysicalDevice();
 		void createLogicalDevice();
 		void destroyInstance();
+
+		constexpr const VkInstance getVkInstance() const { return _instance; }
 
 	protected:
 
@@ -44,6 +47,7 @@ namespace engine
 		VkPhysicalDevice _physicalDevice = VK_NULL_HANDLE;
 		VkDevice _device = VK_NULL_HANDLE;
 		VkQueue _graphicsQueue = VK_NULL_HANDLE;
+		SDL_Window* _window;
 
 		const std::vector<const char*> _validationLayers = {
 			"VK_LAYER_KHRONOS_validation"
