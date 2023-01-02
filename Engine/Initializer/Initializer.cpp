@@ -41,6 +41,7 @@ namespace engine
 namespace engine::vulkan
 {
 	VkInstance instance = nullptr;
+	VkDebugUtilsMessengerEXT debugMessaenger = nullptr;
 	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
 	const std::vector<const char*> validationLayers = {
@@ -102,6 +103,37 @@ namespace engine::vulkan
 	}
 
 	/**
+	* setting up validation layer's debug messenger
+	*/
+	void setupDebugMessenger()
+	{
+		if (!enableValidationLayers)
+		{
+			return;
+		}
+
+		VkDebugUtilsMessengerCreateInfoEXT createInfo{
+			.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
+			.messageSeverity
+				= VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT
+				| VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT
+				| VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
+				| VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
+			.messageType
+				= VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT
+				| VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
+				| VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
+			.pfnUserCallback = debugCallback,
+			.pUserData = nullptr
+		};
+
+		if (createDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessaenger) != VK_SUCCESS)
+		{
+			throw new std::runtime_error(std::format("failed to set a debug messenger"));
+		}
+	}
+
+	/**
 	* enumerate Vulkan extensions
 	*/
 	void getExtensions()
@@ -141,6 +173,9 @@ namespace engine::vulkan
 		}
 	}
 
+	/**
+	* create logical device
+	*/
 	void createLogicalDevice()
 	{
 		QueueFamilyIndicies indices = findQueueFamilyIndices(physicalDevice);
@@ -165,6 +200,9 @@ namespace engine::vulkan
 		};
 	}
 
+	/**
+	* check validation layer support
+	*/
 	bool checkValidationLayerSupport()
 	{
 		uint32_t layerCount;
@@ -194,6 +232,39 @@ namespace engine::vulkan
 		return true;
 	}
 
+	/**
+	* create debug utils messenger extension
+	*/
+	VkResult createDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
+	{
+		PFN_vkCreateDebugUtilsMessengerEXT func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+
+		if (func == nullptr)
+		{
+			return VK_ERROR_EXTENSION_NOT_PRESENT;
+		}
+
+		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+	}
+
+	/**
+	* destroy debug utils messenger extension
+	*/
+	void destroyDebugUtilsmessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
+	{
+		PFN_vkDestroyDebugUtilsMessengerEXT func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+
+		if (func == nullptr)
+		{
+			return;
+		}
+
+		func(instance, debugMessaenger, pAllocator);
+	}
+
+	/**
+	* getting required vulkan extensions
+	*/
 	std::vector<const char*> getRequiredExtensions(SDL_Window* window)
 	{
 		uint32_t sdlExtensionCount = 0;
@@ -221,6 +292,9 @@ namespace engine::vulkan
 		return sdlExtensions;
 	}
 
+	/**
+	* pick the most suitable physical device
+	*/
 	VkPhysicalDevice pickSuitablePhysicalDevice(const std::vector<VkPhysicalDevice>& devices)
 	{
 		std::multimap<int, VkPhysicalDevice> candidates;
@@ -240,7 +314,9 @@ namespace engine::vulkan
 		}
 	}
 
-	/* calculate physical devices processing score */
+	/**
+	* calculate physical devices processing score
+	*/
 	int calculatePhysicalDeviceScore(const VkPhysicalDevice& device)
 	{
 		int score = 0;
@@ -276,7 +352,7 @@ namespace engine::vulkan
 	{
 		QueueFamilyIndicies indicies;
 
- 		uint32_t queueFamilyCount = 0;
+		uint32_t queueFamilyCount = 0;
 		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 		std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
 		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
@@ -304,6 +380,7 @@ namespace engine::vulkan
 	*/
 	void destroyInstance()
 	{
+		destroyDebugUtilsmessengerEXT(instance, debugMessaenger, nullptr);
 		vkDestroyInstance(instance, nullptr);
 	}
 }

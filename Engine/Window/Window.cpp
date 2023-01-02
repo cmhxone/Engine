@@ -47,6 +47,7 @@ void Window::init()
 	}
 
 	engine::vulkan::createInstance(_window);
+	engine::vulkan::setupDebugMessenger();
 	engine::vulkan::getExtensions();
 	engine::vulkan::selectPhysicalDevice();
 	engine::vulkan::createLogicalDevice();
