@@ -62,11 +62,6 @@ namespace engine
 			void* pUserData
 		)
 		{
-			if (messageServerity < VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
-			{
-				return VK_FALSE;
-			}
-
 			spdlog::error(std::format("validation layer: {}", pCallbackData->pMessage));
 
 			return VK_FALSE;

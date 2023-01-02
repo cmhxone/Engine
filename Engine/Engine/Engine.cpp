@@ -58,7 +58,7 @@ namespace engine
 		}
 
 		/* Create vulkan instance */
-		const VkApplicationInfo appInfo = {
+		VkApplicationInfo appInfo = {
 			.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
 			.pNext = nullptr,
 			.pApplicationName = "vulkan_hello",
@@ -68,18 +68,25 @@ namespace engine
 			.apiVersion = VK_API_VERSION_1_3
 		};
 
-		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
-		populateDebugMessengerCreateInfo(debugCreateInfo);
-
-		const VkInstanceCreateInfo createInfo = {
+		VkInstanceCreateInfo createInfo = {
 			.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-			.pNext = _enableValidationLayers ? (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo : nullptr,
 			.pApplicationInfo = &appInfo,
-			.enabledLayerCount = _enableValidationLayers ? static_cast<uint32_t>(_validationLayers.size()) : 0,
-			.ppEnabledLayerNames = _enableValidationLayers ? _validationLayers.data() : nullptr,
 			.enabledExtensionCount = static_cast<uint32_t>(extensions.size()),
 			.ppEnabledExtensionNames = extensions.data(),
 		};
+
+		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+		if (_enableValidationLayers)
+		{
+			populateDebugMessengerCreateInfo(debugCreateInfo);
+			createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCallback;
+			createInfo.enabledLayerCount = static_cast<uint32_t>(_validationLayers.size());
+			createInfo.ppEnabledLayerNames = _validationLayers.data();
+		}
+		else
+		{
+			createInfo.pNext = nullptr;
+		}
 
 		VkResult result = vkCreateInstance(&createInfo, nullptr, &_instance);
 		if (result != VkResult::VK_SUCCESS)
