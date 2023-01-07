@@ -381,7 +381,14 @@ namespace engine
 
 		bool extensionSupported = checkDeviceExtensionSupport(device);
 
-		return indices.isComplete() && extensionSupported;
+		bool swapChainAdequate = false;
+		if (extensionSupported)
+		{
+			SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device);
+			swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+		}
+
+		return indices.isComplete() && extensionSupported && swapChainAdequate;
 	}
 
 	/**
@@ -441,6 +448,36 @@ namespace engine
 		}
 
 		return indicies;
+	}
+
+	/**
+	* querying physical device supports swap chain
+	*/
+	SwapChainSupportDetails Engine::querySwapChainSupport(const VkPhysicalDevice& device)
+	{
+		SwapChainSupportDetails details;
+
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, _surface, &details.capabilities);
+
+		uint32_t formatCount;
+		vkGetPhysicalDeviceSurfaceFormatsKHR(device, _surface, &formatCount, nullptr);
+
+		if (formatCount != 0)
+		{
+			details.formats.resize(formatCount);
+			vkGetPhysicalDeviceSurfaceFormatsKHR(device, _surface, &formatCount, details.formats.data());
+		}
+
+		uint32_t presentModeCount;
+		vkGetPhysicalDeviceSurfacePresentModesKHR(device, _surface, &presentModeCount, nullptr);
+
+		if (presentModeCount != 0)
+		{
+			details.presentModes.resize(presentModeCount);
+			vkGetPhysicalDeviceSurfacePresentModesKHR(device, _surface, &presentModeCount, details.presentModes.data());
+		}
+
+		return details;
 	}
 
 	/**

@@ -13,6 +13,9 @@
 
 namespace engine
 {
+	/**
+	* Vulkan queue family indicies
+	*/
 	struct QueueFamilyIndicies
 	{
 		std::optional<uint32_t> graphicsFamily;
@@ -22,6 +25,16 @@ namespace engine
 		{
 			return graphicsFamily.has_value() && presentFamily.has_value();
 		}
+	};
+
+	/**
+	* Vulkan swap chain support details
+	*/
+	struct SwapChainSupportDetails
+	{
+		VkSurfaceCapabilitiesKHR capabilities;
+		std::vector<VkSurfaceFormatKHR> formats;
+		std::vector<VkPresentModeKHR> presentModes;
 	};
 
 	class Engine : public Singleton<Engine>
@@ -101,6 +114,7 @@ namespace engine
 		bool isDeviceSuitable(const VkPhysicalDevice& device);
 		bool checkDeviceExtensionSupport(const VkPhysicalDevice& device);
 		QueueFamilyIndicies findQueueFamilyIndices(const VkPhysicalDevice& device);
+		SwapChainSupportDetails querySwapChainSupport(const VkPhysicalDevice& device);
 
 		};
 	};
