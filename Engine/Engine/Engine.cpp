@@ -272,6 +272,13 @@ namespace engine
 		{
 			throw std::runtime_error(std::format("failed to create swap chain"));
 		}
+
+		vkGetSwapchainImagesKHR(_device, _swapchain, &imageCount, nullptr);
+		_swapChainImages.resize(imageCount);
+		vkGetSwapchainImagesKHR(_device, _swapchain, &imageCount, _swapChainImages.data());
+
+		_swapChainImageFormat = surfaceFormat.format;
+		_swapChainExtent = extent;
 	}
 
 	/**

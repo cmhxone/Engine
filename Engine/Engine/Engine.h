@@ -70,6 +70,9 @@ namespace engine
 		VkQueue _presentQueue = VK_NULL_HANDLE;
 		VkSurfaceKHR _surface = VK_NULL_HANDLE;
 		VkSwapchainKHR _swapchain = VK_NULL_HANDLE;
+		std::vector<VkImage> _swapChainImages;
+		VkFormat _swapChainImageFormat;
+		VkExtent2D _swapChainExtent;
 
 		SDL_Window* _window;
 
