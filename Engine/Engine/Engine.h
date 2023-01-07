@@ -42,7 +42,7 @@ namespace engine
 
 		constexpr const VkInstance getVkInstance() const { return _instance; }
 		constexpr const VkSurfaceKHR getVkSurface() const { return _surface; }
-		
+
 		constexpr const SDL_Window* getSDLWindow() const { return _window; }
 
 	protected:
@@ -60,6 +60,10 @@ namespace engine
 
 		const std::vector<const char*> _validationLayers = {
 			"VK_LAYER_KHRONOS_validation"
+		};
+
+		const std::vector<const char*> _deviceExtensions = {
+			VK_KHR_SWAPCHAIN_EXTENSION_NAME
 		};
 
 #ifndef NDEBUG
@@ -89,13 +93,16 @@ namespace engine
 		);
 		void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 		void destroyDebugUtilsmessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
-		std::vector<const char*> getRequiredExtensions(SDL_Window* window);
+		
+		std::vector<const char*> getRequiredExtensions();
+		
 		VkPhysicalDevice pickSuitablePhysicalDevice(const std::vector<VkPhysicalDevice>& devices);
 		int calculatePhysicalDeviceScore(const VkPhysicalDevice& device);
 		bool isDeviceSuitable(const VkPhysicalDevice& device);
+		bool checkDeviceExtensionSupport(const VkPhysicalDevice& device);
 		QueueFamilyIndicies findQueueFamilyIndices(const VkPhysicalDevice& device);
 
+		};
 	};
-};
 
 #endif

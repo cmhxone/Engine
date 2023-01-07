@@ -51,7 +51,7 @@ namespace engine
 		std::vector<const char*> extensions;
 		try
 		{
-			extensions = getRequiredExtensions(_window);
+			extensions = getRequiredExtensions();
 		}
 		catch (const std::exception& e)
 		{
@@ -301,16 +301,16 @@ namespace engine
 	/**
 	* getting required vulkan extensions
 	*/
-	std::vector<const char*> Engine::getRequiredExtensions(SDL_Window* window)
+	std::vector<const char*> Engine::getRequiredExtensions()
 	{
 		uint32_t sdlExtensionCount = 0;
-		if (SDL_Vulkan_GetInstanceExtensions(window, &sdlExtensionCount, nullptr) != SDL_TRUE)
+		if (SDL_Vulkan_GetInstanceExtensions(_window, &sdlExtensionCount, nullptr) != SDL_TRUE)
 		{
 			throw std::runtime_error(std::format("failed to get SDL required extensions, {}", SDL_GetError()));
 		}
 
 		std::vector<const char*> sdlExtensions(sdlExtensionCount);
-		if (SDL_Vulkan_GetInstanceExtensions(window, &sdlExtensionCount, sdlExtensions.data()) != SDL_TRUE)
+		if (SDL_Vulkan_GetInstanceExtensions(_window, &sdlExtensionCount, sdlExtensions.data()) != SDL_TRUE)
 		{
 			throw std::runtime_error(std::format("failed to get SDL required extensions, {}", SDL_GetError()));
 		}
@@ -378,7 +378,30 @@ namespace engine
 	{
 		QueueFamilyIndicies indices = findQueueFamilyIndices(device);
 
-		return indices.isComplete();
+		bool extensionSupported = checkDeviceExtensionSupport(device);
+
+		return indices.isComplete() && extensionSupported;
+	}
+
+	/**
+	* check physical device supports extension
+	*/
+	bool Engine::checkDeviceExtensionSupport(const VkPhysicalDevice& device)
+	{
+		uint32_t extensionCount;
+		vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+
+		std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+		vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
+
+		std::set<std::string> requiredExtensions(_deviceExtensions.begin(), _deviceExtensions.end());
+
+		for (const VkExtensionProperties& extension : availableExtensions)
+		{
+			requiredExtensions.erase(extension.extensionName);
+		}
+
+		return requiredExtensions.empty();
 	}
 
 	/**
