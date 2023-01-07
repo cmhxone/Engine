@@ -194,7 +194,8 @@ namespace engine
 			.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
 			.queueCreateInfoCount = 1,
 			.pQueueCreateInfos = queueCreateInfos.data(),
-			.enabledExtensionCount = 0,
+			.enabledExtensionCount = static_cast<uint32_t>(_deviceExtensions.size()),
+			.ppEnabledExtensionNames = _deviceExtensions.data(),
 			.pEnabledFeatures = &deviceFeatures,
 		};
 
