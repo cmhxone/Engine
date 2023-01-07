@@ -16,10 +16,11 @@ namespace engine
 	struct QueueFamilyIndicies
 	{
 		std::optional<uint32_t> graphicsFamily;
+		std::optional<uint32_t> presentFamily;
 
 		constexpr const bool isComplete() const
 		{
-			return graphicsFamily.has_value();
+			return graphicsFamily.has_value() && presentFamily.has_value();
 		}
 	};
 
@@ -52,6 +53,7 @@ namespace engine
 		VkPhysicalDevice _physicalDevice = VK_NULL_HANDLE;
 		VkDevice _device = VK_NULL_HANDLE;
 		VkQueue _graphicsQueue = VK_NULL_HANDLE;
+		VkQueue _presentQueue = VK_NULL_HANDLE;
 		VkSurfaceKHR _surface = VK_NULL_HANDLE;
 
 		SDL_Window* _window;
