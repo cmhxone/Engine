@@ -117,7 +117,7 @@ namespace engine
 	/**
 	* enumerate Vulkan extensions
 	*/
-	void Engine::getExtensions()
+	void Engine::searchExtensions()
 	{
 		/* Log Vulkan extensions */
 		uint32_t extensionCount = 0;
@@ -128,6 +128,16 @@ namespace engine
 		for (const VkExtensionProperties& extension : extensions)
 		{
 			spdlog::debug(std::format("Loaded extension: {}", extension.extensionName));
+		}
+	}
+
+	/**
+	* create VkSurface
+	*/
+	void Engine::createSurface()
+	{
+		if (SDL_Vulkan_CreateSurface(_window, _instance, &_surface) != SDL_TRUE) {
+			throw std::runtime_error(std::format("failed to create VkSurface: {}", SDL_GetError()));
 		}
 	}
 
@@ -399,6 +409,7 @@ namespace engine
 	void Engine::destroyInstance()
 	{
 		vkDestroyDevice(_device, nullptr);
+		vkDestroySurfaceKHR(_instance, _surface, nullptr);
 		destroyDebugUtilsmessengerEXT(_instance, _debugMessaenger, nullptr);
 		vkDestroyInstance(_instance, nullptr);
 	}

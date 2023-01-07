@@ -49,7 +49,8 @@ void Window::init()
 	engine::Engine::getInstance()->setSDLWindow(_window);
 	engine::Engine::getInstance()->createInstance();
 	engine::Engine::getInstance()->setupDebugMessenger();
-	engine::Engine::getInstance()->getExtensions();
+	engine::Engine::getInstance()->searchExtensions();
+	engine::Engine::getInstance()->createSurface();
 	engine::Engine::getInstance()->selectPhysicalDevice();
 	engine::Engine::getInstance()->createLogicalDevice();
 }

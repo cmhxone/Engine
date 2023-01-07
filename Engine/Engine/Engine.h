@@ -30,14 +30,19 @@ namespace engine
 		~Engine();
 
 		void setSDLWindow(SDL_Window* window) { _window = window; };
+
 		void createInstance();
 		void setupDebugMessenger();
-		void getExtensions();
+		void searchExtensions();
+		void createSurface();
 		void selectPhysicalDevice();
 		void createLogicalDevice();
 		void destroyInstance();
 
 		constexpr const VkInstance getVkInstance() const { return _instance; }
+		constexpr const VkSurfaceKHR getVkSurface() const { return _surface; }
+		
+		constexpr const SDL_Window* getSDLWindow() const { return _window; }
 
 	protected:
 
@@ -47,6 +52,8 @@ namespace engine
 		VkPhysicalDevice _physicalDevice = VK_NULL_HANDLE;
 		VkDevice _device = VK_NULL_HANDLE;
 		VkQueue _graphicsQueue = VK_NULL_HANDLE;
+		VkSurfaceKHR _surface = VK_NULL_HANDLE;
+
 		SDL_Window* _window;
 
 		const std::vector<const char*> _validationLayers = {
