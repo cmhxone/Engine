@@ -110,9 +110,9 @@
       <AdditionalDependencies>inih.lib;vulkan-1.lib;SDL3.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)resources\ini\config.ini $(OutDir)
-copy $(SDL3_dir)\lib\Win32\Debug\SDL3.dll $(OutDir)
-copy $(SDL3_dir)\lib\Win32\Debug\SDL2.dll $(OutDir)</Command>
+      <Command>xcopy /y $(ProjectDir)resources\ini\config.ini $(OutDir)
+xcopy /y $(SDL3_dir)\lib\Win32\Debug\SDL3.dll $(OutDir)
+xcopy /y $(SDL3_dir)\lib\Win32\Debug\SDL2.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -135,9 +135,9 @@ copy $(SDL3_dir)\lib\Win32\Debug\SDL2.dll $(OutDir)</Command>
       <AdditionalDependencies>inih.lib;vulkan-1.lib;SDL3.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)resources\ini\config.ini $(OutDir)
-copy $(SDL3_dir)\lib\Win32\Release\SDL3.dll $(OutDir)
-copy $(SDL3_dir)\lib\Win32\Release\SDL2.dll $(OutDir)</Command>
+      <Command>xcopy /y $(ProjectDir)resources\ini\config.ini $(OutDir)
+xcopy /y $(SDL3_dir)\lib\Win32\Release\SDL3.dll $(OutDir)
+xcopy /y $(SDL3_dir)\lib\Win32\Release\SDL2.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -156,9 +156,9 @@ copy $(SDL3_dir)\lib\Win32\Release\SDL2.dll $(OutDir)</Command>
       <AdditionalDependencies>inih.lib;vulkan-1.lib;SDL3.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)resources\ini\config.ini $(OutDir)
-copy $(SDL3_dir)\lib\x64\Debug\SDL3.dll $(OutDir)
-copy $(SDL3_dir)\lib\x64\Debug\SDL2.dll $(OutDir)</Command>
+      <Command>xcopy /y $(ProjectDir)resources\ini\config.ini $(OutDir)
+xcopy /y $(SDL3_dir)\lib\x64\Debug\SDL3.dll $(OutDir)
+xcopy /y $(SDL3_dir)\lib\x64\Debug\SDL2.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -181,9 +181,9 @@ copy $(SDL3_dir)\lib\x64\Debug\SDL2.dll $(OutDir)</Command>
       <AdditionalDependencies>inih.lib;vulkan-1.lib;SDL3.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)resources\ini\config.ini $(OutDir)
-copy $(SDL3_dir)\lib\x64\Release\SDL3.dll $(OutDir)
-copy $(SDL3_dir)\lib\x64\Release\SDL2.dll $(OutDir)</Command>
+      <Command>xcopy /y $(ProjectDir)resources\ini\config.ini $(OutDir)
+xcopy /y $(SDL3_dir)\lib\x64\Release\SDL3.dll $(OutDir)
+xcopy /y $(SDL3_dir)\lib\x64\Release\SDL2.dll $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
