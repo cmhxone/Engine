@@ -51,6 +51,7 @@ namespace engine
 		void createSurface();
 		void selectPhysicalDevice();
 		void createLogicalDevice();
+		void createSwapChain();
 		void destroyInstance();
 
 		constexpr const VkInstance getVkInstance() const { return _instance; }
@@ -68,6 +69,7 @@ namespace engine
 		VkQueue _graphicsQueue = VK_NULL_HANDLE;
 		VkQueue _presentQueue = VK_NULL_HANDLE;
 		VkSurfaceKHR _surface = VK_NULL_HANDLE;
+		VkSwapchainKHR _swapchain = VK_NULL_HANDLE;
 
 		SDL_Window* _window;
 

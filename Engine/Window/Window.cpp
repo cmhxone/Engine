@@ -53,6 +53,7 @@ void Window::init()
 	engine::Engine::getInstance()->createSurface();
 	engine::Engine::getInstance()->selectPhysicalDevice();
 	engine::Engine::getInstance()->createLogicalDevice();
+	engine::Engine::getInstance()->createSwapChain();
 }
 
 /**
