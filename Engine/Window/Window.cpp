@@ -54,6 +54,7 @@ void Window::init()
 	engine::Engine::getInstance()->selectPhysicalDevice();
 	engine::Engine::getInstance()->createLogicalDevice();
 	engine::Engine::getInstance()->createSwapChain();
+	engine::Engine::getInstance()->createImageview();
 }
 
 /**

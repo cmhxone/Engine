@@ -247,7 +247,7 @@ namespace engine
 		};
 
 		QueueFamilyIndicies indicies = findQueueFamilyIndices(_physicalDevice);
-		uint32_t queueFamilyIndicies[] = {indicies.graphicsFamily.value(), indicies.presentFamily.value()};
+		uint32_t queueFamilyIndicies[] = { indicies.graphicsFamily.value(), indicies.presentFamily.value() };
 
 		if (indicies.graphicsFamily != indicies.presentFamily)
 		{
@@ -279,6 +279,42 @@ namespace engine
 
 		_swapChainImageFormat = surfaceFormat.format;
 		_swapChainExtent = extent;
+	}
+
+	/**
+	* create image view
+	*/
+	void Engine::createImageview()
+	{
+		_swapChainImageViews.resize(_swapChainImages.size());
+
+		for (size_t i = 0; i < _swapChainImages.size(); i++)
+		{
+			VkImageViewCreateInfo createInfo{
+				.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+				.image = _swapChainImages[i],
+				.viewType = VK_IMAGE_VIEW_TYPE_2D,
+				.format = _swapChainImageFormat,
+				.components = {
+					.r = VK_COMPONENT_SWIZZLE_IDENTITY,
+					.g = VK_COMPONENT_SWIZZLE_IDENTITY,
+					.b = VK_COMPONENT_SWIZZLE_IDENTITY,
+					.a = VK_COMPONENT_SWIZZLE_IDENTITY,
+				},
+				.subresourceRange = {
+					.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+					.baseMipLevel = 0,
+					.levelCount = 1,
+					.baseArrayLayer = 0,
+					.layerCount = 1,
+				}
+			};
+
+			if (vkCreateImageView(_device, &createInfo, nullptr, &_swapChainImageViews[i]) != VK_SUCCESS)
+			{
+				throw std::runtime_error(std::format("failed to create image view"));
+			}
+		}
 	}
 
 	/**
@@ -607,6 +643,10 @@ namespace engine
 	*/
 	void Engine::destroyInstance()
 	{
+		for (const VkImageView& imageView : _swapChainImageViews)
+		{
+			vkDestroyImageView(_device, imageView, nullptr);
+		}
 		vkDestroySwapchainKHR(_device, _swapchain, nullptr);
 		vkDestroyDevice(_device, nullptr);
 		vkDestroySurfaceKHR(_instance, _surface, nullptr);

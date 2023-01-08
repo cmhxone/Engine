@@ -52,6 +52,7 @@ namespace engine
 		void selectPhysicalDevice();
 		void createLogicalDevice();
 		void createSwapChain();
+		void createImageview();
 		void destroyInstance();
 
 		constexpr const VkInstance getVkInstance() const { return _instance; }
@@ -71,6 +72,7 @@ namespace engine
 		VkSurfaceKHR _surface = VK_NULL_HANDLE;
 		VkSwapchainKHR _swapchain = VK_NULL_HANDLE;
 		std::vector<VkImage> _swapChainImages;
+		std::vector<VkImageView> _swapChainImageViews;
 		VkFormat _swapChainImageFormat;
 		VkExtent2D _swapChainExtent;
 
