@@ -112,7 +112,9 @@
     <PostBuildEvent>
       <Command>xcopy /y $(ProjectDir)resources\ini\config.ini $(OutDir)
 xcopy /y $(SDL3_dir)\lib\Win32\Debug\SDL3.dll $(OutDir)
-xcopy /y $(SDL3_dir)\lib\Win32\Debug\SDL2.dll $(OutDir)</Command>
+xcopy /y $(SDL3_dir)\lib\Win32\Debug\SDL2.dll $(OutDir)
+xcopy /y $(ProjectDir)shader $(OutDir)
+xcopy /y /I $(ProjectDir)resources\shader $(OutDir)shader</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -137,7 +139,9 @@ xcopy /y $(SDL3_dir)\lib\Win32\Debug\SDL2.dll $(OutDir)</Command>
     <PostBuildEvent>
       <Command>xcopy /y $(ProjectDir)resources\ini\config.ini $(OutDir)
 xcopy /y $(SDL3_dir)\lib\Win32\Release\SDL3.dll $(OutDir)
-xcopy /y $(SDL3_dir)\lib\Win32\Release\SDL2.dll $(OutDir)</Command>
+xcopy /y $(SDL3_dir)\lib\Win32\Release\SDL2.dll $(OutDir)
+xcopy /y $(ProjectDir)shader $(OutDir)
+xcopy /y /I $(ProjectDir)resources\shader $(OutDir)shader</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -158,7 +162,8 @@ xcopy /y $(SDL3_dir)\lib\Win32\Release\SDL2.dll $(OutDir)</Command>
     <PostBuildEvent>
       <Command>xcopy /y $(ProjectDir)resources\ini\config.ini $(OutDir)
 xcopy /y $(SDL3_dir)\lib\x64\Debug\SDL3.dll $(OutDir)
-xcopy /y $(SDL3_dir)\lib\x64\Debug\SDL2.dll $(OutDir)</Command>
+xcopy /y $(SDL3_dir)\lib\x64\Debug\SDL2.dll $(OutDir)
+xcopy /y /I $(ProjectDir)resources\shader $(OutDir)shader</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -183,7 +188,8 @@ xcopy /y $(SDL3_dir)\lib\x64\Debug\SDL2.dll $(OutDir)</Command>
     <PostBuildEvent>
       <Command>xcopy /y $(ProjectDir)resources\ini\config.ini $(OutDir)
 xcopy /y $(SDL3_dir)\lib\x64\Release\SDL3.dll $(OutDir)
-xcopy /y $(SDL3_dir)\lib\x64\Release\SDL2.dll $(OutDir)</Command>
+xcopy /y $(SDL3_dir)\lib\x64\Release\SDL2.dll $(OutDir)
+xcopy /y /I $(ProjectDir)resources\shader $(OutDir)shader</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -200,6 +206,8 @@ xcopy /y $(SDL3_dir)\lib\x64\Release\SDL2.dll $(OutDir)</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\ini\config.ini" />
+    <None Include="resources\shader\fragment.glsl" />
+    <None Include="resources\shader\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

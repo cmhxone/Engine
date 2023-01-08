@@ -32,3 +32,13 @@ $> git clone https://github.com/libsdl-org/SDL
 then just read and follow `INSTALL.txt` file
 
 ---
+
+### Compile GLSL to SPIR-V
+
+```
+$> glslc -fshader-stage=vertex ./vertex.glsl -o vertex.spv
+
+$> glslc -fshader-stage=fragment ./vertex.glsl -o fragment.spv
+```
+
+---

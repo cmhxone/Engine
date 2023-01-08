@@ -322,6 +322,8 @@ namespace engine
 	*/
 	void Engine::createGraphicsPipeline()
 	{
+		std::vector<char> vertShaderCode = readFile("shader/vertex.spv");
+		std::vector<char> fragShaderCode = readFile("shader/fragment.spv");
 	}
 
 	/**

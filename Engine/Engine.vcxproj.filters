@@ -37,6 +37,9 @@
     <Filter Include="소스 파일\Engine">
       <UniqueIdentifier>{b27776ab-9e71-47de-b834-96f868db2357}</UniqueIdentifier>
     </Filter>
+    <Filter Include="리소스 파일\shader">
+      <UniqueIdentifier>{5f2286ad-d09d-44b5-a4f9-f1e285661c38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -69,6 +72,12 @@
   <ItemGroup>
     <None Include="resources\ini\config.ini">
       <Filter>리소스 파일\ini</Filter>
+    </None>
+    <None Include="resources\shader\vertex.glsl">
+      <Filter>리소스 파일\shader</Filter>
+    </None>
+    <None Include="resources\shader\fragment.glsl">
+      <Filter>리소스 파일\shader</Filter>
     </None>
   </ItemGroup>
 </Project>
