@@ -318,6 +318,13 @@ namespace engine
 	}
 
 	/**
+	* create graphics pipeline
+	*/
+	void Engine::createGraphicsPipeline()
+	{
+	}
+
+	/**
 	* check validation layer support
 	*/
 	bool Engine::checkValidationLayerSupport()

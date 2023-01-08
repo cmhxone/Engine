@@ -53,6 +53,8 @@ namespace engine
 		void createLogicalDevice();
 		void createSwapChain();
 		void createImageview();
+		void createGraphicsPipeline();
+
 		void destroyInstance();
 
 		constexpr const VkInstance getVkInstance() const { return _instance; }

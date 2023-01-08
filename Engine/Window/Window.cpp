@@ -55,6 +55,7 @@ void Window::init()
 	engine::Engine::getInstance()->createLogicalDevice();
 	engine::Engine::getInstance()->createSwapChain();
 	engine::Engine::getInstance()->createImageview();
+	engine::Engine::getInstance()->createGraphicsPipeline();
 }
 
 /**
