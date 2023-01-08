@@ -324,6 +324,28 @@ namespace engine
 	{
 		std::vector<char> vertShaderCode = readFile("shader/vertex.spv");
 		std::vector<char> fragShaderCode = readFile("shader/fragment.spv");
+
+		VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
+		VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
+
+		VkPipelineShaderStageCreateInfo vertShaderCreateInfo{
+			.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+			.stage = VK_SHADER_STAGE_VERTEX_BIT,
+			.module = vertShaderModule,
+			.pName = "main",
+		};
+
+		VkPipelineShaderStageCreateInfo fragShaderCreateInfo{
+			.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+			.stage = VK_SHADER_STAGE_FRAGMENT_BIT,
+			.module = fragShaderModule,
+			.pName = "main",
+		};
+
+		VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderCreateInfo, fragShaderCreateInfo };
+
+		vkDestroyShaderModule(_device, vertShaderModule, nullptr);
+		vkDestroyShaderModule(_device, fragShaderModule, nullptr);
 	}
 
 	/**
@@ -645,6 +667,26 @@ namespace engine
 
 			return actualExtent;
 		}
+	}
+
+	/**
+	* create shader module
+	*/
+	VkShaderModule Engine::createShaderModule(const std::vector<char>& code)
+	{
+		VkShaderModuleCreateInfo createInfo{
+			.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
+			.codeSize = code.size(),
+			.pCode = reinterpret_cast<const uint32_t*>(code.data()),
+		};
+
+		VkShaderModule shaderModule;
+		if (vkCreateShaderModule(_device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
+		{
+			throw std::runtime_error(std::format("failed to create shader module"));
+		}
+
+		return shaderModule;
 	}
 
 	/**
