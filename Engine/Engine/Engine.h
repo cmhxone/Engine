@@ -4,6 +4,7 @@
 #include <vector>
 #include <optional>
 #include <format>
+#include <fstream>
 
 #include <vulkan/vulkan.h>
 #include <SDL3/SDL.h>
@@ -106,6 +107,24 @@ namespace engine
 			return VK_FALSE;
 		}
 
+		static std::vector<char> readFile(const std::string_view& filename)
+		{
+			std::ifstream file(filename.data(), std::ios::ate | std::ios::binary);
+
+			if (!file.is_open())
+			{
+				throw std::runtime_error(std::format("failed to open file. filename={}", filename.data()));
+			}
+
+			size_t fileSize = static_cast<size_t>(file.tellg());
+			std::vector<char> buffer(fileSize);
+
+			file.seekg(0);
+			file.read(buffer.data(), fileSize);
+
+			return buffer;
+		}
+
 		bool checkValidationLayerSupport();
 		VkResult createDebugUtilsMessengerEXT(
 			VkInstance instance,
@@ -115,9 +134,9 @@ namespace engine
 		);
 		void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 		void destroyDebugUtilsmessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
-		
+
 		std::vector<const char*> getRequiredExtensions();
-		
+
 		VkPhysicalDevice pickSuitablePhysicalDevice(const std::vector<VkPhysicalDevice>& devices);
 		int calculatePhysicalDeviceScore(const VkPhysicalDevice& device);
 		bool isDeviceSuitable(const VkPhysicalDevice& device);
@@ -129,7 +148,7 @@ namespace engine
 		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
-		};
 	};
+};
 
 #endif
