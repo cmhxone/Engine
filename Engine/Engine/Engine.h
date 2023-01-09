@@ -81,6 +81,7 @@ namespace engine
 		VkExtent2D _swapChainExtent;
 		VkRenderPass _renderPass;
 		VkPipelineLayout _pipelineLayout;
+		VkPipeline _pipeline;
 
 		SDL_Window* _window;
 

@@ -491,6 +491,29 @@ namespace engine
 			throw std::runtime_error(std::format("failed to create pipeline layout"));
 		}
 
+		VkGraphicsPipelineCreateInfo pipelineInfo{
+			.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
+			.stageCount = 2,
+			.pStages = shaderStages,
+			.pVertexInputState = &vertexInputInfo,
+			.pInputAssemblyState = &inputAssemblyInfo,
+			.pRasterizationState = &rasterizationStateInfo,
+			.pMultisampleState = &multisampleStateInfo,
+			.pDepthStencilState = nullptr,
+			.pColorBlendState = &colorBlending,
+			.pDynamicState = &dynamicStateInfo,
+			.layout = _pipelineLayout,
+			.renderPass = _renderPass,
+			.subpass = 0,
+			.basePipelineHandle = VK_NULL_HANDLE,
+			.basePipelineIndex = -1,
+		};
+
+		if (vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_pipeline) != VK_SUCCESS)
+		{
+			throw std::runtime_error(std::format("failed to create graphics pipeline"));
+		}
+
 		vkDestroyShaderModule(_device, vertShaderModule, nullptr);
 		vkDestroyShaderModule(_device, fragShaderModule, nullptr);
 	}
@@ -841,6 +864,7 @@ namespace engine
 	*/
 	void Engine::destroyInstance()
 	{
+		vkDestroyPipeline(_device, _pipeline, nullptr);
 		vkDestroyPipelineLayout(_device, _pipelineLayout, nullptr);
 		vkDestroyRenderPass(_device, _renderPass, nullptr);
 		for (const VkImageView& imageView : _swapChainImageViews)
