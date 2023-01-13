@@ -56,6 +56,7 @@ namespace engine
 		void createImageview();
 		void createRenderPass();
 		void createGraphicsPipeline();
+		void createFrameBuffer();
 
 		void destroyInstance();
 
@@ -82,6 +83,7 @@ namespace engine
 		VkRenderPass _renderPass;
 		VkPipelineLayout _pipelineLayout;
 		VkPipeline _pipeline;
+		std::vector<VkFramebuffer> _swapChainFrameBuffers;
 
 		SDL_Window* _window;
 

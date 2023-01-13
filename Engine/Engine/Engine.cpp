@@ -288,7 +288,7 @@ namespace engine
 	{
 		_swapChainImageViews.resize(_swapChainImages.size());
 
-		for (size_t i = 0; i < _swapChainImages.size(); i++)
+		for (size_t i = 0; const VkImage & images : _swapChainImages)
 		{
 			VkImageViewCreateInfo createInfo{
 				.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
@@ -413,8 +413,8 @@ namespace engine
 		VkViewport viewport{
 			.x = 0.0f,
 			.y = 0.0f,
-			.width = (float) _swapChainExtent.width,
-			.height = (float) _swapChainExtent.height,
+			.width = (float)_swapChainExtent.width,
+			.height = (float)_swapChainExtent.height,
 			.minDepth = 0.0f,
 			.maxDepth = 1.0f,
 		};
@@ -516,6 +516,36 @@ namespace engine
 
 		vkDestroyShaderModule(_device, vertShaderModule, nullptr);
 		vkDestroyShaderModule(_device, fragShaderModule, nullptr);
+	}
+
+	/**
+	*	create vkFrameBuffer
+	*/
+	void Engine::createFrameBuffer()
+	{
+		_swapChainFrameBuffers.resize(_swapChainImageViews.size());
+
+		for (size_t i = 0; const VkImageView & imageView : _swapChainImageViews)
+		{
+			VkImageView attachments[]{
+				_swapChainImageViews[i],
+			};
+
+			VkFramebufferCreateInfo createInfo{
+				.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+				.renderPass = _renderPass,
+				.attachmentCount = 1,
+				.pAttachments = attachments,
+				.width = _swapChainExtent.width,
+				.height = _swapChainExtent.height,
+				.layers = 1,
+			};
+
+			if (vkCreateFramebuffer(_device, &createInfo, nullptr, _swapChainFrameBuffers.data()) != VK_SUCCESS)
+			{
+				throw std::runtime_error(std::format("failed to create framebuffer"));
+			}
+		}
 	}
 
 	/**
@@ -864,6 +894,10 @@ namespace engine
 	*/
 	void Engine::destroyInstance()
 	{
+		for (const VkFramebuffer& buffer : _swapChainFrameBuffers)
+		{
+			vkDestroyFramebuffer(_device, buffer, nullptr);
+		}
 		vkDestroyPipeline(_device, _pipeline, nullptr);
 		vkDestroyPipelineLayout(_device, _pipelineLayout, nullptr);
 		vkDestroyRenderPass(_device, _renderPass, nullptr);
