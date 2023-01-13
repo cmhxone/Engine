@@ -80,12 +80,12 @@ namespace engine
 		std::vector<VkImageView> _swapChainImageViews;
 		VkFormat _swapChainImageFormat;
 		VkExtent2D _swapChainExtent;
-		VkRenderPass _renderPass;
-		VkPipelineLayout _pipelineLayout;
-		VkPipeline _pipeline;
+		VkRenderPass _renderPass = VK_NULL_HANDLE;
+		VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
+		VkPipeline _pipeline = VK_NULL_HANDLE;
 		std::vector<VkFramebuffer> _swapChainFrameBuffers;
 
-		SDL_Window* _window;
+		SDL_Window* _window = nullptr;
 
 		const std::vector<const char*> _validationLayers = {
 			"VK_LAYER_KHRONOS_validation"

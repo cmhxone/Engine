@@ -636,13 +636,13 @@ namespace engine
 	std::vector<const char*> Engine::getRequiredExtensions()
 	{
 		uint32_t sdlExtensionCount = 0;
-		if (SDL_Vulkan_GetInstanceExtensions(_window, &sdlExtensionCount, nullptr) != SDL_TRUE)
+		if (SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount, nullptr) != SDL_TRUE)
 		{
 			throw std::runtime_error(std::format("failed to get SDL required extensions, {}", SDL_GetError()));
 		}
 
 		std::vector<const char*> sdlExtensions(sdlExtensionCount);
-		if (SDL_Vulkan_GetInstanceExtensions(_window, &sdlExtensionCount, sdlExtensions.data()) != SDL_TRUE)
+		if (SDL_Vulkan_GetInstanceExtensions(&sdlExtensionCount, sdlExtensions.data()) != SDL_TRUE)
 		{
 			throw std::runtime_error(std::format("failed to get SDL required extensions, {}", SDL_GetError()));
 		}
